@@ -30,7 +30,7 @@ const Home = (props) => {
       let trending = [];
 
       snapshot.docs.forEach((doc) => {
-        console.log(recommends);
+        // console.log(recommends);  //testing the data from firebase to the console log to see if it is working or not
         switch (doc.data().type) {
           case "recommend":
             recommends.push({ id: doc.id, ...doc.data() });

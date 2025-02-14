@@ -1,32 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectNewDisney } from "../features/Movies/movieSlice";
 
 function NewDisney() {
+  const movies = useSelector(selectNewDisney);
   return (
     <Container>
-      <h4>New to Disney+</h4>
+      <h4>New on Disney+</h4> {/* Updated heading */}
       <Content>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/viewers-disney.png" alt="" />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/viewers-disney.png" alt="" />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/viewers-disney.png" alt="" />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/viewers-disney.png" alt="" />
-          </Link>
-        </Wrap>
+        {movies &&
+          movies.map((movie, key) => (
+            <Wrap key={key}>
+              <Link to={`/detail/` + movie.id}>
+                <img src={movie.cardImg} alt={movie.title} />
+              </Link>
+            </Wrap>
+          ))}
       </Content>
     </Container>
   );
@@ -43,7 +34,7 @@ const Content = styled.div`
   grid-template-columns: repeat(
     4,
     minmax(0, 1fr)
-  ); //please search about this property
+  );
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
