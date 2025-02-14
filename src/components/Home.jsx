@@ -1,4 +1,3 @@
-// npm install react-slick slick-carousel
 import styled from "styled-components";
 import ImgSlider from "./ImgSlider";
 import Viewers from "./Viewers";
@@ -6,8 +5,61 @@ import Recommends from "./Recommends";
 import NewDisney from "./NewDisney";
 import Originals from "./Originals";
 import Trending from "./Trending";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { collection, onSnapshot } from "firebase/firestore"; // ✅ Import Firestore functions
+import db from "../firebase/firebase";
+import { setMovies } from "../features/Movies/movieSlice";
+import { selectUserName } from "../features/user/userSlice";
 
-const Home = () => {
+const Home = (props) => {
+  const dispatch = useDispatch();
+  const userName = useSelector(selectUserName);
+
+  useEffect(() => {
+    console.log("hello");
+
+    // ✅ Correct Firestore Collection Reference
+    const moviesCollection = collection(db, "movies");
+
+    // ✅ Subscribe to Firestore Snapshot
+    const unsubscribe = onSnapshot(moviesCollection, (snapshot) => {
+      let recommends = [];
+      let newDisneys = [];
+      let originals = [];
+      let trending = [];
+
+      snapshot.docs.forEach((doc) => {
+        console.log(recommends);
+        switch (doc.data().type) {
+          case "recommend":
+            recommends.push({ id: doc.id, ...doc.data() });
+            break;
+          case "new":
+            newDisneys.push({ id: doc.id, ...doc.data() });
+            break;
+          case "original":
+            originals.push({ id: doc.id, ...doc.data() });
+            break;
+          case "trending":
+            trending.push({ id: doc.id, ...doc.data() });
+            break;
+        }
+      });
+
+      dispatch(
+        setMovies({
+          recommend: recommends,
+          newDisney: newDisneys,
+          original: originals,
+          trending: trending,
+        })
+      );
+    });
+
+    return () => unsubscribe(); // ✅ Clean up Firestore subscription
+  }, [userName, dispatch]);
+
   return (
     <Container>
       <ImgSlider />

@@ -3,10 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-// import firebase from "firebase/compat/app";
-// import "firebase/compat/firestore";
-// import "firebase/compat/auth";
-// import "firebase/compat/storage";
+
 
 // Firebase configuration
 const firebaseConfig = {
